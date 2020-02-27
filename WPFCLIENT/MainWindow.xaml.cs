@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xaml;
 using System.Drawing;
+using MySql.Data.MySqlClient;
 
 namespace WPFCLIENT
 {
@@ -26,21 +27,16 @@ namespace WPFCLIENT
         {
             InitializeComponent();
             Loaded += new RoutedEventHandler(Window_Loaded);
+            sql.Open();
         }
+        public MySqlConnection sql = new MySqlConnection(SQL_Explorer.connectionString());
         private void logSubmit(object sender, RoutedEventArgs e)
         {
-            ErrorExplorer EE = new ErrorExplorer(logNickName.Text.ToString(), logPass.Password.ToString(),lblErrorExpLOG); EE.activateLOG();
-            if (ErrorExplorer.error_key == false)
-            {
-                string NickName = logNickName.Text.ToString();
-                string Password = logPass.Password.ToString();
-                SQL_Explorer SE = new SQL_Explorer(NickName, Password, lblErrorExpLOG); SE.ValidOpening(); SE.Session(); if (SE.ActivateSession) { MessageBox.Show(SE.User.Name.ToString()); }
-            }
+            ErrorExplorer EE = new ErrorExplorer(logNickName.Text.ToString(), logPass.Password.ToString(),lblErrorExpLOG, sql); EE.activateLOG();
         }
 
         private void Go_Registration(object sender, RoutedEventArgs e)
         {
-         //   Button b = new Button(); b.mou
             Login.IsEnabled = false;
             Registration.IsEnabled = true;
             Registration.Visibility = Visibility.Visible;

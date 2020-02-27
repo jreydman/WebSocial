@@ -19,9 +19,10 @@ namespace WPFCLIENT
     public class ErrorExplorer
     {
         //session ErrorExplorer
-        private Label lblERROR;
-        private string Name;
+        private static Label lblERROR;
+        private string NickName;
         private string Pass;
+        private MySql.Data.MySqlClient.MySqlConnection SQL;
         //answers
         static string[] Answers = new string[3]
         {
@@ -29,19 +30,23 @@ namespace WPFCLIENT
             " User содержит некорректные символы или строка пустая; ",
             " Pass содержит некорректные символы или строка пустая; "
         };
-        //bools
+        //bool
         public static bool error_key { get; set; } = true;
+        public static bool valide_key { get; set; } = false;
+        //SQL
+        SQL_Explorer SE;
 
-        public ErrorExplorer(string name, string pass,Label lblErr)
+        public ErrorExplorer(string name, string pass,Label lblErr, MySql.Data.MySqlClient.MySqlConnection sql)
         {
-            Name = name; Pass = pass; lblERROR = lblErr;
+            NickName = name; Pass = pass; lblERROR = lblErr; SQL = sql;
         }
         private static bool UserPassContains(string str)
         {
             return !string.IsNullOrEmpty(str) && !Regex.IsMatch(str, @"[^a-zA-z\d_]") && str.Length<9;
         }
-        private static string UserPassErrorText(string name, string pass)
+        private static string LOGErrorText(string name, string pass)
         {
+            error_key = true;
             if (UserPassContains(name) == false)
             {
                 if (UserPassContains(name) == false && UserPassContains(pass) == false)
@@ -61,12 +66,17 @@ namespace WPFCLIENT
             else 
             {
                 error_key = false;
-                return "";                
+                return "";               
             }
         }
         public void activateLOG()
-        {
-            lblERROR.Content = UserPassErrorText(Name, Pass);
+        {           
+            if (!valide_key)
+            {
+                lblERROR.Content = LOGErrorText(NickName, Pass);
+                if (!error_key) { SE = new SQL_Explorer(NickName, Pass, lblERROR, 1, SQL); SE.ValidOpening(); if (SE.ActivateSession == true) { SE.Session(); if (SE.ActivateSession) { valide_key = true; MessageBox.Show(SE.User.Name.ToString()); } } }
+            }
+            else lblERROR.Content = " Session was initialized! ";
         }
 
     }

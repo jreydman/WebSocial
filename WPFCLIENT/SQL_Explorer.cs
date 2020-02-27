@@ -20,9 +20,11 @@ namespace WPFCLIENT
         public string LogUser { get; set; } = "";
         public string LogPass { get; set; } = "";
         public Person User;
-        public SQL_Explorer(string Log_Exp_User, string Log_Exp_Pass, Label lblErr)
+        private int ConfigActivity { get; set; } = 0;   //0 - NOT ACTIVITY ; 1 - LOGIN ; 2 - REGISTRATION ;
+        private static MySqlConnection LOGSqlConnection;
+        public SQL_Explorer(string Log_Exp_User, string Log_Exp_Pass, Label lblErr, int conf, MySqlConnection sql)
         {
-            LogUser = Log_Exp_User; LogPass = Log_Exp_Pass; lblERROR = lblErr;
+            LogUser = Log_Exp_User; LogPass = Log_Exp_Pass; lblERROR = lblErr; ConfigActivity=conf; LOGSqlConnection = sql;
         }
         public static string connectionString()
         {
@@ -41,43 +43,51 @@ namespace WPFCLIENT
         }
         public void ValidOpening()
         {
-            MySqlConnection LOGSqlConnection = new MySqlConnection(connectionString());
-            LOGSqlConnection.Open();
-                
-                string try_user = null;
-                string try_pass = null;
-                string Select = "SELECT `ID`, `NickName`, `Password`, `Name`, `Surname` FROM `Users` WHERE Nickname LIKE '" + LogUser + "'";
-                MySqlCommand command = new MySqlCommand(Select, LOGSqlConnection);
-                MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows == true)
+            if (ActivateSession == false&&LOGSqlConnection.State==System.Data.ConnectionState.Open)
+            {
+                if (ConfigActivity == 1) //LOGIN
                 {
-                    while (reader.Read())
+                    string try_user = null;
+                    string try_pass = null;
+                    string Select = "SELECT `ID`, `NickName`, `Password`, `Name`, `Surname` FROM `Users` WHERE Nickname LIKE '" + LogUser + "'";
+                    MySqlCommand command = new MySqlCommand(Select, LOGSqlConnection);
+                    MySqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows == true)
                     {
-                        if (reader != null)
+                        while (reader.Read())
                         {
-                            Crypt validePass = new Crypt(lblERROR);
-                            try_user = reader[1].ToString();            
-                            try_pass = validePass.Decrypt(reader[2].ToString());
-                            if (try_pass != LogPass)
+                            if (reader != null)
                             {
-                                lblERROR.Content = "Неправильный Pass";
-                            }
-                            else
-                            {
-                                lblERROR.Content = " Connection successful! ";
-                                ActivateSession = true;                            
+                                Crypt validePass = new Crypt(lblERROR);
+                                try_user = reader[1].ToString();
+                                try_pass = validePass.Decrypt(reader[2].ToString());
+                                if (try_pass != LogPass)
+                                {
+                                    lblERROR.Content = " Неправильный Pass ";
+                                }
+                                else
+                                {
+                                    lblERROR.Content = " Connection successful! ";
+                                    ActivateSession = true;
+                                    LOGSqlConnection.Close();
+                                    break;
+                                }
                                 break;
                             }
-                            break;
                         }
                     }
+                    else
+                    {
+                        lblERROR.Content = " NickName не найден ";
+                    }
                     reader.Close();
-                    LOGSqlConnection.Close();
                 }
-                else
+                else if (ConfigActivity == 2) //REGISTRATION
                 {
-                  lblERROR.Content = " NickName не найден";
+
                 }
+            }
+            else { lblERROR.Content = " Session was initialized! "; }
         }
     }
 }
