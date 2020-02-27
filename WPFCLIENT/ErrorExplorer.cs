@@ -20,15 +20,17 @@ namespace WPFCLIENT
     {
         //session ErrorExplorer
         private static Label lblERROR;
-        private string NickName;
-        private string Pass;
         private MySql.Data.MySqlClient.MySqlConnection SQL;
         //answers
-        static string[] Answers = new string[3]
+        static string[] Answers = new string[7]
         {
-            " User, Pass содержит некорректные символы или строки пустые; ",
-            " User содержит некорректные символы или строка пустая; ",
-            " Pass содержит некорректные символы или строка пустая; "
+            " NickName, Password содержит некорректные символы или строки пустые; ",
+            " NickName содержит некорректные символы или строка пустая; ",
+            " Password содержит некорректные символы или строка пустая; ",
+            " Name содержит некорректные символы или строка пустая; ",
+            " Surname содержит некорректные символы или строка пустая; ",
+            " RePassword содержит некорректные символы или строка пустая; ",
+            " Pass и RePass не совпадают; "
         };
         //bool
         public static bool error_key { get; set; } = true;
@@ -36,28 +38,32 @@ namespace WPFCLIENT
         //SQL
         SQL_Explorer SE;
 
-        public ErrorExplorer(string name, string pass,Label lblErr, MySql.Data.MySqlClient.MySqlConnection sql)
+        public ErrorExplorer(Label lblErr, MySql.Data.MySqlClient.MySqlConnection sql)
         {
-            NickName = name; Pass = pass; lblERROR = lblErr; SQL = sql;
+            lblERROR = lblErr; SQL = sql;
         }
         private static bool UserPassContains(string str)
         {
-            return !string.IsNullOrEmpty(str) && !Regex.IsMatch(str, @"[^a-zA-z\d_]") && str.Length<9;
+            return !string.IsNullOrEmpty(str) && !Regex.IsMatch(str, @"[^a-zA-z\d_]");
+        }
+        private static bool RegistrationContains(string str)
+        {
+            return !string.IsNullOrEmpty(str) && !Regex.IsMatch(str, @"[^a-zA-z\d_]");
         }
         private static string LOGErrorText(string name, string pass)
         {
             error_key = true;
             if (UserPassContains(name) == false)
             {
-                if (UserPassContains(name) == false && UserPassContains(pass) == false)
+                if (UserPassContains(name) == false && UserPassContains(pass) == false || pass.Length < 9)
                 {
                     return Answers[0];
                 }
                 else return Answers[1];
             }
-            else if (UserPassContains(pass) == false)
+            else if (UserPassContains(pass) == false || pass.Length < 9)
             {
-                if (UserPassContains(name) == false && UserPassContains(pass) == false)
+                if (UserPassContains(name) == false && UserPassContains(pass) == false || pass.Length < 9)
                     {
                       return Answers[0];
                     }
@@ -69,12 +75,32 @@ namespace WPFCLIENT
                 return "";               
             }
         }
-        public void activateLOG()
+        private static string REGErrorText(string nickname, string name, string surname, string pass, string repass)
+        {
+            error_key = true;
+            if (RegistrationContains(nickname) == false || nickname.Length < 5) { return Answers[1]; }
+            else if(RegistrationContains(name) == false) { return Answers[3]; }
+            else if(RegistrationContains(surname) == false) { return Answers[4]; }
+            else if(RegistrationContains(pass) == false || pass.Length < 9) { return Answers[2];}
+            else if (RegistrationContains(repass) == false) { return Answers[5]; }
+            else if (RegistrationContains(pass) == true && RegistrationContains(repass) == true && pass != repass) { return Answers[6]; }
+            else { error_key = false; return ""; }
+        }
+        public void activateLOG(string NickName, string Pass)
         {           
             if (!valide_key)
             {
                 lblERROR.Content = LOGErrorText(NickName, Pass);
-                if (!error_key) { SE = new SQL_Explorer(NickName, Pass, lblERROR, 1, SQL); SE.ValidOpening(); if (SE.ActivateSession == true) { SE.Session(); if (SE.ActivateSession) { valide_key = true; MessageBox.Show(SE.User.Name.ToString()); } } }
+                if (!error_key) { SE = new SQL_Explorer(lblERROR, SQL); SE.ValidOpeningLOG(NickName, Pass); if (SE.ActivateSession == true) { SE.Session(); if (SE.ActivateSession) { valide_key = true; MessageBox.Show(SE.User.Name.ToString()); } } }
+            }
+            else lblERROR.Content = " Session was initialized! ";
+        }
+        public void activateREG(string NickName, string Name, string Surname, string Pass, string RePass)
+        {
+            if(!valide_key)
+            {
+                lblERROR.Content = REGErrorText(NickName, Name, Surname, Pass, RePass);
+                if (!error_key) { SE = new SQL_Explorer(lblERROR, SQL); SE.ValidOpeningREG(NickName, Name, Surname, Pass); if (SE.ActivateSession == true) { SE.Session(); if (SE.ActivateSession) { valide_key = true; MessageBox.Show(SE.User.Name.ToString()); } } }
             }
             else lblERROR.Content = " Session was initialized! ";
         }

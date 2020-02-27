@@ -19,12 +19,15 @@ namespace WPFCLIENT
         //Login
         public string LogUser { get; set; } = "";
         public string LogPass { get; set; } = "";
+        //Registration
+
+        //Person
         public Person User;
-        private int ConfigActivity { get; set; } = 0;   //0 - NOT ACTIVITY ; 1 - LOGIN ; 2 - REGISTRATION ;
-        private static MySqlConnection LOGSqlConnection;
-        public SQL_Explorer(string Log_Exp_User, string Log_Exp_Pass, Label lblErr, int conf, MySqlConnection sql)
+        //SQL
+        private static MySqlConnection SqlConnection;
+        public SQL_Explorer(Label lblErr, MySqlConnection sql)
         {
-            LogUser = Log_Exp_User; LogPass = Log_Exp_Pass; lblERROR = lblErr; ConfigActivity=conf; LOGSqlConnection = sql;
+             lblERROR = lblErr; SqlConnection = sql;
         }
         public static string connectionString()
         {
@@ -34,6 +37,10 @@ namespace WPFCLIENT
             string password = "CJYsv1bAPM";
             return "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
         }
+        public static string InsertNewUser(string regNickName, string regPass, string regName, string regSurname)
+        {
+            return "INSERT INTO `Users` (`NickName`, `Password`, `Name`, `Surname`) VALUES ('" + regNickName + "', '" + regPass + "', '" + regName + "', '" + regSurname + "')";
+        }
         public void Session()
         {
             if(ActivateSession)
@@ -41,16 +48,14 @@ namespace WPFCLIENT
               User = new Person(LogUser);
             }
         }
-        public void ValidOpening()
+        public void ValidOpeningLOG(string LogUser, string LogPass)
         {
-            if (ActivateSession == false&&LOGSqlConnection.State==System.Data.ConnectionState.Open)
+            if (ActivateSession == false&&SqlConnection.State==System.Data.ConnectionState.Open)
             {
-                if (ConfigActivity == 1) //LOGIN
-                {
                     string try_user = null;
                     string try_pass = null;
                     string Select = "SELECT `ID`, `NickName`, `Password`, `Name`, `Surname` FROM `Users` WHERE Nickname LIKE '" + LogUser + "'";
-                    MySqlCommand command = new MySqlCommand(Select, LOGSqlConnection);
+                    MySqlCommand command = new MySqlCommand(Select, SqlConnection);
                     MySqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows == true)
                     {
@@ -69,7 +74,7 @@ namespace WPFCLIENT
                                 {
                                     lblERROR.Content = " Connection successful! ";
                                     ActivateSession = true;
-                                    LOGSqlConnection.Close();
+                                    SqlConnection.Close();
                                     break;
                                 }
                                 break;
@@ -81,13 +86,14 @@ namespace WPFCLIENT
                         lblERROR.Content = " NickName не найден ";
                     }
                     reader.Close();
-                }
-                else if (ConfigActivity == 2) //REGISTRATION
-                {
-
-                }
             }
             else { lblERROR.Content = " Session was initialized! "; }
+        }
+        public void ValidOpeningREG(string RegNickName, string RegName, string RegSurname,string RegPass)
+        {
+                MySqlCommand myCommand = new MySqlCommand(InsertNewUser(RegNickName, RegPass, RegName, RegSurname), SqlConnection);
+                myCommand.ExecuteNonQuery();
+                SqlConnection.Close();
         }
     }
 }

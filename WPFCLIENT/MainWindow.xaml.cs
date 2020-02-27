@@ -32,7 +32,8 @@ namespace WPFCLIENT
         public MySqlConnection sql = new MySqlConnection(SQL_Explorer.connectionString());
         private void logSubmit(object sender, RoutedEventArgs e)
         {
-            ErrorExplorer EE = new ErrorExplorer(logNickName.Text.ToString(), logPass.Password.ToString(),lblErrorExpLOG, sql); EE.activateLOG();
+            ErrorExplorer EE = new ErrorExplorer(lblErrorExpLOG, sql); EE.activateLOG(logNickName.Text.ToString(), logPass.Password.ToString());
+            if (ErrorExplorer.valide_key == true) { Login.IsEnabled = false; }
         }
 
         private void Go_Registration(object sender, RoutedEventArgs e)
@@ -51,7 +52,8 @@ namespace WPFCLIENT
 
         private void regSubmit(object sender, RoutedEventArgs e)
         {
-
+            ErrorExplorer EE = new ErrorExplorer(lblErrorExpREG, sql); EE.activateREG(regNickName.Text.ToString(), regName.Text.ToString(), regSurname.Text.ToString(), regPass.Password.ToString(), regRePass.Password.ToString());
+            if (ErrorExplorer.valide_key == true) { Registration.IsEnabled = false; }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
