@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFCLIENT", "WPFCLIENT\WPFCLIENT.csproj", "{2E3A1797-8CD4-4BA1-867F-ED0D24A7ADB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E3A1797-8CD4-4BA1-867F-ED0D24A7ADB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E3A1797-8CD4-4BA1-867F-ED0D24A7ADB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E3A1797-8CD4-4BA1-867F-ED0D24A7ADB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E3A1797-8CD4-4BA1-867F-ED0D24A7ADB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0B1637A-1FDD-4C98-A514-AC1C80E568E0}
+	EndGlobalSection
+EndGlobal

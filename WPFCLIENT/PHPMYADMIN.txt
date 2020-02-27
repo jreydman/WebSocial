@@ -1,0 +1,13 @@
+Username: zcy327Y8WW
+
+Database name: zcy327Y8WW
+
+Password: CJYsv1bAPM
+
+Server: remotemysql.com
+
+Port: 3306
+
+CryptKey: 0xK2608
+
+ID NickName Pass Name Surname /UserGroup/

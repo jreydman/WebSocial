@@ -1,0 +1,92 @@
+﻿<Window x:Name="window" x:Class="WPFCLIENT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFCLIENT"
+        mc:Ignorable="d"
+        Title="WEBSocial Client(beta)" Height="537" Width="1010" MaxWidth="1010" MinWidth="1010" MinHeight="537" MaxHeight="537" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/StyleBoxesConf.xaml"/>
+                <ResourceDictionary Source="Resources/ExplorersConf.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Canvas x:Name="canvas_Main">
+        <Canvas.Background>
+            <ImageBrush x:Name="MainBackground" ImageSource="Resources/background.jpg" Stretch="UniformToFill"/>
+        </Canvas.Background>
+        <Rectangle Name="Flex" Fill="#d2d5e3" Opacity="0.2" Width="{Binding ActualWidth, ElementName=canvas_Main, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=canvas_Main, Mode=OneWay}" />
+        <Border Name="Login" Width="505" Height="468" Canvas.Top="18">
+            <Canvas Name="Canvas_Login" Width="{Binding ActualWidth, ElementName=Login, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=Login, Mode=OneWay}">
+                <Rectangle Fill="#ececec" Opacity="0.8" RadiusX="20" RadiusY="20" Width="{Binding ActualWidth, ElementName=Canvas_Login, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=Canvas_Login, Mode=OneWay}" Canvas.Left="-10"/>
+                <Label Name="LOG_Label" Content="LOG IN" Width="110" Height="57" Canvas.Left="198" Canvas.Top="20" Style="{DynamicResource H1Style}" FontFamily="Impact"/>
+                <TextBox x:Name="logNickName" Style="{DynamicResource ResourceKey=txtBoxStyle}" Canvas.Left="210" Canvas.Top="150"/>
+                <PasswordBox x:Name="logPass" Style="{DynamicResource ResourceKey=pwdBoxStyle}" Canvas.Left="210" Canvas.Top="220"/>
+                <Label Name="lblLogNickName" Content="NICKNAME" Canvas.Left="10" Canvas.Top="140" Style="{DynamicResource PointStyle}"/>
+                <Label Name="lblLogPass" Content="PASSWORD" Canvas.Top="210" Style="{DynamicResource PointStyle}"/>
+                <Button Name="LOGSUMBIT" Content="SUBMIT" Style="{DynamicResource ResourceKey=submitBtnStyle}" Canvas.Left="170" Canvas.Top="290" Height="60" Width="170" Click="logSubmit" />
+                <Label Name="lblErrorExpLOG" Content="" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Canvas.Left="10" Canvas.Top="82" Width="445" Height="54"/>
+                <Button x:Name="GoREG" Content="Registration" Canvas.Left="335" Canvas.Top="427" FontSize="20" Background="{x:Null}" BorderBrush="{x:Null}" Click="Go_Registration" Style="{DynamicResource goBtnStyle}">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="(Canvas.Left)" TargetName="Login">
+                                        <DoubleAnimation From="-10" To="-500"
+                                         Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="(Canvas.Left)" TargetName="Registration">
+                                        <DoubleAnimation From="{Binding ElementName=window, Path=Width}" To="515"
+                                         Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Canvas>
+        </Border>
+        <Border x:Name="Registration" Width="505" Height="468" Canvas.Left="515" Canvas.Top="18" Visibility="Collapsed">
+            <Canvas x:Name="Canvas_Registration" Width="{Binding ActualWidth, ElementName=Registration, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=Registration, Mode=OneWay}">
+                <Rectangle Fill="#ececec" Opacity="0.8" RadiusX="20" RadiusY="20" Width="{Binding ActualWidth, ElementName=Canvas_Registration, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=Canvas_Registration, Mode=OneWay}"/>
+                <Label Name="REG_Label" Content="LOG UP" Width="128" Height="57" Canvas.Left="198" Canvas.Top="20" Style="{DynamicResource H1Style}" FontFamily="Impact"/>
+                <TextBox Name="regNickName" Style="{DynamicResource txtBoxStyle}" Canvas.Top="100" Canvas.Left="45"/>
+                <TextBox Name="regName" Style="{DynamicResource txtBoxStyle}" Canvas.Top="150" Canvas.Left="45"/>
+                <TextBox Name="regSurname" Style="{DynamicResource txtBoxStyle}" Canvas.Top="200" Canvas.Left="45"/>
+                <PasswordBox Name="regPass" Style="{DynamicResource pwdBoxStyle}" Canvas.Top="250" Canvas.Left="45"/>
+                <PasswordBox Name="regRePass" Style="{DynamicResource pwdBoxStyle}" Canvas.Top="300" Canvas.Left="45"/>
+                <Label Name="lblRegNickName" Content="NICKNAME" Style="{DynamicResource PointStyle}" Canvas.Top="90" Canvas.Left="310"/>
+                <Label Name="lblName" Content="NAME" Style="{DynamicResource PointStyle}" Canvas.Top="140" Canvas.Left="310"/>
+                <Label Name="lblSurName" Content="SURNAME" Style="{DynamicResource PointStyle}" Canvas.Top="190" Canvas.Left="310"/>
+                <Label Name="lblRegPass" Content="PASSWORD" Style="{DynamicResource PointStyle}" Canvas.Top="240" Canvas.Left="310"/>
+                <Label Name="lblRegRePass" Content="RE PASSWORD" Style="{DynamicResource PointStyle}" Canvas.Top="290" Canvas.Left="310" FontSize="25"/>
+                <Button Name="REGSUBMIT" Content="SUBMIT" Style="{DynamicResource ResourceKey=submitBtnStyle}" Canvas.Left="170" Canvas.Top="360" Height="60" Width="170" Click="regSubmit" />
+                <Button x:Name="GoLOG" Content="Login" Canvas.Left="40" Canvas.Top="427" FontSize="20" Background="{x:Null}" BorderBrush="{x:Null}" Click="Go_Login" Style="{DynamicResource goBtnStyle}">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="(Canvas.Left)" TargetName="Login">
+                                        <DoubleAnimation From="-510" To="-10"
+                                         Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard TargetProperty="(Canvas.Left)" TargetName="Registration">
+                                        <DoubleAnimation From="515" To="{Binding ElementName=window, Path=Width}"
+                                         Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Canvas>
+        </Border>
+    </Canvas>
+</Window>
