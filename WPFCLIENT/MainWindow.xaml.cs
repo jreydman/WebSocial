@@ -41,6 +41,7 @@ namespace WPFCLIENT
             Login.IsEnabled = false;
             Registration.IsEnabled = true;
             Registration.Visibility = Visibility.Visible;
+            ErrorExplorer.CleanToRes();
         }
 
         private void Go_Login(object sender, RoutedEventArgs e)
@@ -48,11 +49,12 @@ namespace WPFCLIENT
             Login.Visibility = Visibility.Visible;
             Registration.IsEnabled = false;
             Login.IsEnabled = true;
+            ErrorExplorer.CleanToRes();
         }
 
         private void regSubmit(object sender, RoutedEventArgs e)
         {
-            ErrorExplorer EE = new ErrorExplorer(lblErrorExpREG, sql); EE.activateREG(regNickName.Text.ToString(), regName.Text.ToString(), regSurname.Text.ToString(), regPass.Password.ToString(), regRePass.Password.ToString());
+            ErrorExplorer EE = new ErrorExplorer(lblErrorExpREG, sql); EE.activateREG(regNickName.Text.ToString(),regEmail.Text.ToString(), regName.Text.ToString(), regSurname.Text.ToString(), regPass.Password.ToString(), regRePass.Password.ToString());
             if (ErrorExplorer.valide_key == true) { Registration.IsEnabled = false; }
         }
 
