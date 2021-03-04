@@ -36,7 +36,7 @@ namespace WPFCLIENT
         }
         public static string connectionString()
         {
-            string server = "remotemysql.com";
+            string server = "______";
             string database = "zcy327Y8WW";
             string uid = "zcy327Y8WW";
             string password = "CJYsv1bAPM";
