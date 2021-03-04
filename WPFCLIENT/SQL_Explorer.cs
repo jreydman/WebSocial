@@ -37,9 +37,9 @@ namespace WPFCLIENT
         public static string connectionString()
         {
             string server = "______";
-            string database = "zcy327Y8WW";
-            string uid = "zcy327Y8WW";
-            string password = "CJYsv1bAPM";
+            string database = "______";
+            string uid = "_____";
+            string password = "______";
             return "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
         }
         public static string InsertNewUser(string regNickName, string regPass, string regName, string regSurname)
