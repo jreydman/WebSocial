@@ -1,4 +1,0 @@
-host(server): k95580v8.beget.tech
-user: k95580v8_admin
-password: wscXh3D1910
-port: 21
