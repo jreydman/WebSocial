@@ -32,7 +32,7 @@ namespace WPFCLIENT
             FileInfo toUpload = new FileInfo(filename);
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://k95580v8.beget.tech/public_html/Tokens/" + nickname+".txt");
             request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = new NetworkCredential("k95580v8_admin", "wscXh3D1910");
+            request.Credentials = new NetworkCredential("____", "_____");
             Stream ftpStream = request.GetRequestStream();
             FileStream fileStream = File.OpenRead(filename);
             byte[] buffer = new byte[1024];
